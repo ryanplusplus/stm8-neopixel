@@ -10,6 +10,7 @@
 #include "tim4_system_tick.h"
 #include "tiny_timer.h"
 #include "watchdog.h"
+#include "neopixel.h"
 
 static tiny_timer_group_t timer_group;
 static tiny_timer_t timer;
@@ -21,6 +22,14 @@ static void kick_watchdog(tiny_timer_group_t* timer_group, void* context)
   watchdog_kick();
 }
 
+static const uint8_t rgbs[] = {
+  // clang-format off
+  0x01, 0x01, 0x00,
+  0x00, 0x01, 0x01,
+  0x01, 0x00, 0x01
+  // clang-format on
+};
+
 void main(void)
 {
   disableInterrupts();
@@ -31,10 +40,14 @@ void main(void)
   }
   enableInterrupts();
 
-  tiny_timer_start_periodic(&timer_group, &timer, 100, kick_watchdog, NULL);
+  GPIOE->CR1 |= 0x80;
+  GPIOE->DDR |= 0x80;
+
+  tiny_timer_start_periodic(&timer_group, &timer, 10, kick_watchdog, NULL);
 
   while(true) {
     tiny_timer_group_run(&timer_group);
+    neopixel_write(rgbs, sizeof(rgbs));
     wfi();
   }
 }
