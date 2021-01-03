@@ -39,3 +39,7 @@ make -f <target>.mk datasheet
 ```shell
 make -f <target>.mk hardware_manual
 ```
+
+## Resources
+- [STM8 Assembly Manual](http://www.st.com/resource/en/programming_manual/cd00161709-stm8-cpu-programming-manual-stmicroelectronics.pdf)
+- [SDCC Assembler Manual](http://svn.code.sf.net/p/sdcc/code/trunk/sdcc/sdas/doc/asmlnk.txt)
