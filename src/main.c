@@ -11,6 +11,7 @@
 #include "tiny_timer.h"
 #include "watchdog.h"
 #include "neopixel_pe7.h"
+#include "tiny_utils.h"
 
 static tiny_timer_group_t timer_group;
 static tiny_timer_t timer;
@@ -22,12 +23,17 @@ static void kick_watchdog(tiny_timer_group_t* timer_group, void* context)
   watchdog_kick();
 }
 
-static const uint8_t rgbs[] = {
-  // clang-format off
-  0x01, 0x01, 0x00,
-  0x00, 0x01, 0x01,
-  0x01, 0x00, 0x01
-  // clang-format on
+static const neopixel_pe7_color_t leds[] = {
+  { .r = 0x01, .g = 0x01, .b = 0x00 },
+  { .r = 0x00, .g = 0x01, .b = 0x01 },
+  { .r = 0x01, .g = 0x00, .b = 0x01 },
+
+  { .r = 0x01, .g = 0x00, .b = 0x00 },
+  { .r = 0x00, .g = 0x01, .b = 0x00 },
+  { .r = 0x00, .g = 0x00, .b = 0x01 },
+
+  { .r = 0x00, .g = 0x00, .b = 0x00 },
+  { .r = 0x01, .g = 0x01, .b = 0x01 },
 };
 
 void main(void)
@@ -47,7 +53,7 @@ void main(void)
 
   while(true) {
     tiny_timer_group_run(&timer_group);
-    neopixel_pe7_write(rgbs, sizeof(rgbs));
+    neopixel_pe7_write(leds, element_count(leds));
     wfi();
   }
 }
