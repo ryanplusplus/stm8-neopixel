@@ -14,13 +14,15 @@
 static tiny_timer_group_t timer_group;
 static tiny_timer_t timer;
 
-static void kick_watchdog(tiny_timer_group_t* timer_group, void* context) {
+static void kick_watchdog(tiny_timer_group_t* timer_group, void* context)
+{
   (void)context;
   (void)timer_group;
   watchdog_kick();
 }
 
-void main(void) {
+void main(void)
+{
   disableInterrupts();
   {
     watchdog_init();
