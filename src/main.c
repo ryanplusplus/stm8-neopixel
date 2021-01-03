@@ -5,7 +5,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#include "stm8s.h"
+#include "interrupts.h"
 #include "clock.h"
 #include "tim4_system_tick.h"
 #include "tiny_timer.h"
@@ -18,8 +18,8 @@ static tiny_timer_t timer;
 
 static void kick_watchdog(tiny_timer_group_t* timer_group, void* context)
 {
-  (void)context;
   (void)timer_group;
+  (void)context;
   watchdog_kick();
 }
 
@@ -38,16 +38,15 @@ static const neopixel_pe7_color_t leds[] = {
 
 void main(void)
 {
-  disableInterrupts();
+  interrupts_disable();
   {
     watchdog_init();
     clock_init();
     tiny_timer_group_init(&timer_group, tim4_system_tick_init());
   }
-  enableInterrupts();
+  interrupts_enable();
 
-  GPIOE->CR1 |= 0x80;
-  GPIOE->DDR |= 0x80;
+  neopixel_pe7_init();
 
   tiny_timer_start_periodic(&timer_group, &timer, 10, kick_watchdog, NULL);
 
