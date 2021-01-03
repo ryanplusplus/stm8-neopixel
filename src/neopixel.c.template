@@ -3,7 +3,19 @@
  * @brief
  */
 
-#include "neopixel.h"
+#include "stm8s.h"
+#include "neopixel.h.template"
+
+#ifndef neopixel_port
+#error "neopixel_port must be defined"
+#endif
+
+#ifndef neopixel_pin
+#error "neopixel_pin must be defined"
+#endif
+
+#define port neopixel_concat(GPIO, neopixel_concat(neopixel_port, _BaseAddress))
+#define pin #neopixel_pin
 
 static void send_byte(uint8_t byte)
 {
@@ -21,10 +33,10 @@ static void send_byte(uint8_t byte)
 
     send_byte$:
       ld    a, (0x04, sp)   ; a <- byte
-      ldw   y, #8           ; y <- 8
+      ldw   y, #8
 
     send_bit$:
-      bset  0x5014, #7
+      bset  port, pin
       sll   a               ; roll left, setting carry if msb(a) == 1
       jrc   send_1$         ; if carry not set
 
@@ -33,7 +45,7 @@ static void send_byte(uint8_t byte)
       nop
       nop
       nop
-      bres  0x5014, #7
+      bres  port, pin
       nop
       nop
       nop
@@ -57,7 +69,7 @@ static void send_byte(uint8_t byte)
       nop
       nop
       nop
-      bres  0x5014, #7
+      bres  port, pin
       nop
       nop
       decw  y
@@ -75,14 +87,14 @@ static void send_byte(uint8_t byte)
   // clang-format on
 }
 
-void neopixel_write(const uint8_t* data, uint16_t count)
+void neopixel_concat(neopixel_api_name, _write)(const uint8_t* data, uint16_t count)
 {
   for(uint16_t i = 0; i < count; i++) {
     send_byte(data[i]);
   }
 }
 
-void neopixel_reset(void)
+void neopixel_concat(neopixel_api_name, _reset)(void)
 {
   // clang-format off
   __asm

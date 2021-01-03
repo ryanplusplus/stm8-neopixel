@@ -10,7 +10,7 @@
 #include "tim4_system_tick.h"
 #include "tiny_timer.h"
 #include "watchdog.h"
-#include "neopixel.h"
+#include "neopixel_pe7.h"
 
 static tiny_timer_group_t timer_group;
 static tiny_timer_t timer;
@@ -47,7 +47,7 @@ void main(void)
 
   while(true) {
     tiny_timer_group_run(&timer_group);
-    neopixel_write(rgbs, sizeof(rgbs));
+    neopixel_pe7_write(rgbs, sizeof(rgbs));
     wfi();
   }
 }
