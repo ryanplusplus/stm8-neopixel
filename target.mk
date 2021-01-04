@@ -5,10 +5,10 @@ STM8_TINY := lib/stm8-tiny
 TINY := $(STM8_TINY)/lib/tiny
 TINY_DEVICES := lib/tiny-devices
 
-DEVICE := stm8s207rb
-DEVICE_TYPE := STM8S207
+DEVICE := stm8s103f3
+DEVICE_TYPE := STM8S103
 STLINK := stlinkv2
-OPENOCD_CFG := $(TOOLS_DIR)/openocd/stm8s207.cfg
+OPENOCD_CFG := $(TOOLS_DIR)/openocd/stm8s103.cfg
 TOOLCHAIN_VERSION := 4.0.0
 
 MAIN := src/main.c

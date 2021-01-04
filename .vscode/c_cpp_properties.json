@@ -1,9 +1,9 @@
 {
   "configurations": [
     {
-      "name": "STM8S207",
+      "name": "STM8S103",
       "defines": [
-        "STM8S207"
+        "STM8S103"
       ],
       "includePath": [
         "${workspaceFolder}/**"
