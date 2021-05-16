@@ -15,14 +15,6 @@
 #include "tiny_utils.h"
 
 static tiny_timer_group_t timer_group;
-static tiny_timer_t timer;
-
-static void kick_watchdog(tiny_timer_group_t* timer_group, void* context)
-{
-  (void)timer_group;
-  (void)context;
-  watchdog_kick();
-}
 
 static const neopixel_pa2_color_t leds[] = {
   { .r = 0x01, .g = 0x01, .b = 0x00 },
@@ -41,16 +33,14 @@ void main(void)
 {
   interrupts_disable();
   {
-    watchdog_init();
     clock_init();
     tiny_timer_group_init(&timer_group, tim4_system_tick_init());
+    watchdog_init(&timer_group);
     pb5_heartbeat_init(&timer_group);
   }
   interrupts_enable();
 
   neopixel_pa2_init();
-
-  tiny_timer_start_periodic(&timer_group, &timer, 10, kick_watchdog, NULL);
 
   while(true) {
     tiny_timer_group_run(&timer_group);
